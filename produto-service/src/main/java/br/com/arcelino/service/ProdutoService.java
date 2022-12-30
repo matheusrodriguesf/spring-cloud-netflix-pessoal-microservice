@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.arcelino.dto.ProdutoForm;
 import br.com.arcelino.dto.ProdutoResponse;
+import br.com.arcelino.exception.ResourceNotFoundException;
 import br.com.arcelino.repository.ProdutoRepository;
 import br.com.arcelino.util.ProdutoMapper;
 import jakarta.transaction.Transactional;
@@ -33,13 +34,15 @@ public class ProdutoService {
     }
 
     public ProdutoResponse findById(Long id) {
-        var produto = produtoRepository.findById(id).orElseThrow();
+        var produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
         return produtoMapper.toProdutoResponse(produto);
     }
 
     @Transactional
     public ProdutoResponse update(Long id, ProdutoForm produtoForm) {
-        var produto = produtoRepository.findById(id).orElseThrow();
+        var produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
         produto.setNome(produtoForm.getNome());
         produto.setDescricao(produtoForm.getDescricao());
         produto.setPreco(produtoForm.getPreco());
