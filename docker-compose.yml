@@ -1,0 +1,17 @@
+version: '3'
+services:
+  produto-db:
+    image: postgres
+    container_name: produto-db
+    environment:
+      - POSTGRES_PASSWORD=produto
+      - POSTGRES_USER=produto
+      - POSTGRES_DB=produto
+    ports:
+      - 5432:5432
+    networks:
+      - spring-cloud-network
+ 
+networks:
+  spring-cloud-network:
+    driver: bridge
